@@ -1,0 +1,6 @@
+biopython>=1.81
+numpy
+matplotlib
+openpyxl
+mappy
+primer3-py

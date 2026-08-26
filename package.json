@@ -1,0 +1,7 @@
+{
+  "name": "kgalanga-pipeline",
+  "private": true,
+  "dependencies": {
+    "docx": "^9.7.1"
+  }
+}
