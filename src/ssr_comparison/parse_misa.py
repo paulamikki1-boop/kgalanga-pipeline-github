@@ -1,3 +1,7 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import re, json
 
 def parse_misa(path):
@@ -45,13 +49,13 @@ def parse_misa(path):
     return d
 
 files = {
-    "KB": "/sessions/serene-wonderful-dirac/mnt/outputs/misa_parse/KB SSR.statistics",
-    "KS": "/sessions/serene-wonderful-dirac/mnt/uploads/KSt9cuoa.fasta.statistics",
-    "KG_ref": "/sessions/serene-wonderful-dirac/mnt/outputs/misa_parse/KG REF SSR.statistics",
-    "K_parviflora": "/sessions/serene-wonderful-dirac/mnt/Kaempferiaparviflora/Kaempferiaparviflora.fasta.statistics",
-    "K_rotunda": "/sessions/serene-wonderful-dirac/mnt/Kaempferiarotunda/Kaempferiarotunda.fasta.statistics",
-    "K_rotunda_RedLeaf": "/sessions/serene-wonderful-dirac/mnt/KaempferiarotundaRedLeafchloroplast/KaempferiarotundaRedLeafchloroplast.fasta.statistics",
-    "K_rotunda_SilverDiamonds": "/sessions/serene-wonderful-dirac/mnt/KaempferiarotundaSilverDiamonds/KaempferiarotundaSilverDiamonds.fasta.statistics",
+    "KB": OUT_DIR + "/misa_parse/KB SSR.statistics",
+    "KS": IN_DIR + "/KSt9cuoa.fasta.statistics",
+    "KG_ref": OUT_DIR + "/misa_parse/KG REF SSR.statistics",
+    "K_parviflora": IN_DIR + "/Kaempferiaparviflora/Kaempferiaparviflora.fasta.statistics",
+    "K_rotunda": IN_DIR + "/Kaempferiarotunda/Kaempferiarotunda.fasta.statistics",
+    "K_rotunda_RedLeaf": IN_DIR + "/KaempferiarotundaRedLeafchloroplast/KaempferiarotundaRedLeafchloroplast.fasta.statistics",
+    "K_rotunda_SilverDiamonds": IN_DIR + "/KaempferiarotundaSilverDiamonds/KaempferiarotundaSilverDiamonds.fasta.statistics",
 }
 
 data = {k: parse_misa(v) for k, v in files.items()}
@@ -60,6 +64,6 @@ for k, v in data.items():
     print(k, "source=", v["source_file"], "size=", v["total_size_bp"], "total_ssrs=", v["total_ssrs"],
           "compound=", v["compound_ssrs"], "unit_dist=", v["unit_distribution"])
 
-with open("/sessions/serene-wonderful-dirac/mnt/outputs/misa_parsed.json", "w") as f:
+with open(OUT_DIR + "/misa_parsed.json", "w") as f:
     json.dump(data, f, indent=2)
 print("saved json")

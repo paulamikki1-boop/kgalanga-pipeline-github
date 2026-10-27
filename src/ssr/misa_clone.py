@@ -10,6 +10,10 @@ claimed by a smaller unit size are not reconsidered by larger unit sizes
 (this is what prevents e.g. (A)8 from also being called a dinucleotide).
 Adjacent SSRs separated by <= max_interruption bp are flagged as compound.
 """
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import re
 from collections import Counter, defaultdict
 
@@ -91,7 +95,7 @@ if __name__ == "__main__":
     from Bio import SeqIO
 
     # ---- VALIDATION against known-correct KS MISA-web output ----
-    ks = str(SeqIO.read("/sessions/tender-vibrant-faraday/mnt/uploads/GeSeqJob-galanga_KS_GenBank.gb","genbank").seq)
+    ks = str(SeqIO.read(IN_DIR + "/GeSeqJob-galanga_KS_GenBank.gb","genbank").seq)
     hits, comp = find_ssrs(ks)
     s = summarize(hits)
     print("="*70); print("VALIDATION: KS genome vs known MISA-web result"); print("="*70)

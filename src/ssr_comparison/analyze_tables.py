@@ -1,7 +1,11 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import openpyxl, json
 from collections import defaultdict
 
-path = "/sessions/serene-wonderful-dirac/mnt/uploads/ssr of kb and ks.xlsx"
+path = IN_DIR + "/ssr of kb and ks.xlsx"
 wb = openpyxl.load_workbook(path, data_only=True)
 
 # ---- Table 1 source: regions ----
@@ -117,6 +121,6 @@ out = {
     "categories": categories,
     "cds_rows": cds_rows,
 }
-with open("/sessions/serene-wonderful-dirac/mnt/outputs/tables_data.json", "w") as f:
+with open(OUT_DIR + "/tables_data.json", "w") as f:
     json.dump(out, f, indent=2, default=str)
 print("saved tables_data.json")

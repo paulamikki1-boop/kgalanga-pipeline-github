@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """Rebuild the Kaempferia phylogeny from the 8-genome whole-plastome alignment."""
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import pickle, json, itertools
 from pathlib import Path
 from collections import Counter, defaultdict
 import numpy as np
 
-OUT=Path("/sessions/tender-vibrant-faraday/mnt/outputs/tree")
-D=pickle.load(open("/sessions/tender-vibrant-faraday/mnt/outputs/primer/proj.pkl","rb"))
+OUT=Path(OUT_DIR + "/tree")
+OUT.mkdir(parents=True, exist_ok=True)
+D=pickle.load(open(OUT_DIR + "/primer/proj.pkl","rb"))
 KEYS,M,DESC=D["keys"],D["matrix"],D["desc"]
 RL=134002                     # LSC + IRb + SSC (IRa duplicate excluded)
 

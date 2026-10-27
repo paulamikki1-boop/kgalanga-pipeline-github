@@ -1,3 +1,6 @@
+const OUT_DIR = process.env.KG_OUTPUT_DIR || "output";
+const IN_DIR = process.env.KG_INPUT_DIR || "data";
+require("fs").mkdirSync(OUT_DIR, { recursive: true });
 const {
   Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType,
   BorderStyle, ShadingType, ExternalHyperlink, Table, TableRow, TableCell,
@@ -253,6 +256,6 @@ const doc = new Document({
 });
 
 Packer.toBuffer(doc).then((buf) => {
-  require("fs").writeFileSync("/sessions/serene-wonderful-dirac/mnt/outputs/Methods_Addendum_KaKs_ANOVA.docx", buf);
+  require("fs").writeFileSync(OUT_DIR + "/Methods_Addendum_KaKs_ANOVA.docx", buf);
   console.log("saved");
 });

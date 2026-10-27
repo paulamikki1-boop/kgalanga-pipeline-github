@@ -1,7 +1,11 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import re, json
 from collections import defaultdict
 
-MISA_PATH = "/sessions/serene-wonderful-dirac/mnt/uploads/kaempfariatjepr2.fasta.misa"
+MISA_PATH = IN_DIR + "/kaempfariatjepr2.fasta.misa"
 
 # true genome lengths from the individually-uploaded fasta files (ground truth, computed directly)
 FASTA_LENS = {
@@ -72,7 +76,7 @@ for seq_id, d in per_seq.items():
         "motifs_complementary": {m: {"total": c} for m, c in comp.items()},
     }
 
-with open("/sessions/serene-wonderful-dirac/mnt/outputs/corrected_reference.json", "w") as f:
+with open(OUT_DIR + "/corrected_reference.json", "w") as f:
     json.dump(out, f, indent=2)
 
 for k, v in out.items():

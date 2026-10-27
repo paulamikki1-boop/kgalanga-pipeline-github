@@ -1,3 +1,6 @@
+const OUT_DIR = process.env.KG_OUTPUT_DIR || "output";
+const IN_DIR = process.env.KG_INPUT_DIR || "data";
+require("fs").mkdirSync(OUT_DIR, { recursive: true });
 const fs = require("fs");
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, HeadingLevel, AlignmentType, ShadingType, VerticalAlign, ImageRun } = require("docx");
 const TOTAL_W = 9016;
@@ -16,7 +19,7 @@ function h1(t){ return new Paragraph({heading:HeadingLevel.HEADING_1, spacing:{b
 function p(t){ return new Paragraph({spacing:{after:160}, children:[new TextRun(t)]}); }
 function caption(t){ return new Paragraph({spacing:{before:60,after:200}, children:[new TextRun({text:t, italics:true, size:18})]}); }
 
-const imgBuf = fs.readFileSync("/sessions/awesome-wizardly-hypatia/mnt/outputs/IR_junction_diagram.png");
+const imgBuf = fs.readFileSync(OUT_DIR + "/IR_junction_diagram.png");
 
 const doc = new Document({ sections:[{ properties:{page:{margin:{top:1440,bottom:1440,left:1440,right:1440}}}, children:[
   new Paragraph({heading:HeadingLevel.TITLE, spacing:{after:80}, children:[new TextRun("IR Junction Diagram (LSC/IRb/SSC/IRa)")]}),
@@ -47,4 +50,4 @@ const doc = new Document({ sections:[{ properties:{page:{margin:{top:1440,bottom
   p("rps19 and rps12 sitting right at the LSC/IR boundaries, and psbA/ndhF flanking the SSC junctions, match the canonical chloroplast quadripartite gene arrangement reported for related Zingiberaceae genomes (Li, Zhao and Liu, 2019)."),
 ]}]});
 
-Packer.toBuffer(doc).then(buf=>{ fs.writeFileSync("/sessions/awesome-wizardly-hypatia/mnt/outputs/IR_junction_diagram_report.docx", buf); console.log("written"); });
+Packer.toBuffer(doc).then(buf=>{ fs.writeFileSync(OUT_DIR + "/IR_junction_diagram_report.docx", buf); console.log("written"); });

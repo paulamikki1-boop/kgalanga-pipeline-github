@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import pickle, json
 import numpy as np
 from pathlib import Path
 from Bio.Seq import Seq
 
-OUT=Path("/sessions/tender-vibrant-faraday/mnt/outputs/primer")
+OUT=Path(OUT_DIR + "/primer")
+OUT.mkdir(parents=True, exist_ok=True)
 D=pickle.load(open(OUT/"proj.pkl","rb"))
 KEYS,M,DESC=D["keys"],D["matrix"],D["desc"]
 GAL,OTH=D["galanga"],D["others"]

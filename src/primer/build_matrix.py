@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """Build a 7-genome character matrix in MK209001 coordinates."""
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import re, pickle, json
 from pathlib import Path
 from Bio import SeqIO
 from Bio.Seq import Seq
 import mappy, numpy as np
 
-UP  = Path("/sessions/tender-vibrant-faraday/mnt/uploads")
-OUT = Path("/sessions/tender-vibrant-faraday/mnt/outputs/primer")
+UP  = Path(IN_DIR)
+OUT = Path(OUT_DIR + "/primer")
+OUT.mkdir(parents=True, exist_ok=True)
 
 GENOMES = {
  "Kgal_KS":      (UP/"GeSeqJob-galanga_KS_GenBank.gb",            "K. galanga KS (narrow)"),

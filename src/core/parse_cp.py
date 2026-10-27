@@ -1,9 +1,13 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import json, sys
 from Bio import SeqIO
 
 FILES = {
-    "KB": "/sessions/awesome-wizardly-hypatia/mnt/uploads/GeSeqJob-galanga_KB_GenBank.gb",
-    "KS": "/sessions/awesome-wizardly-hypatia/mnt/uploads/GeSeqJob-galanga_KS_GenBank.gb",
+    "KB": IN_DIR + "/GeSeqJob-galanga_KB_GenBank.gb",
+    "KS": IN_DIR + "/GeSeqJob-galanga_KS_GenBank.gb",
 }
 
 data = {}
@@ -49,6 +53,6 @@ for label in FILES:
     uniq = sorted(set(genes))
     print(f"{label}: {len(genes)} CDS entries, {len(uniq)} unique gene names")
 
-with open("/sessions/awesome-wizardly-hypatia/mnt/outputs/cds_data.json", "w") as f:
+with open(OUT_DIR + "/cds_data.json", "w") as f:
     json.dump(data, f, indent=1)
 print("saved cds_data.json")

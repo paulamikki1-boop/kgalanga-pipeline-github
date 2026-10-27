@@ -1,9 +1,13 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import json
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
-data = json.load(open("/sessions/awesome-wizardly-hypatia/mnt/outputs/rscu_table.json"))
+data = json.load(open(OUT_DIR + "/rscu_table.json"))
 rows = data["rscu_rows"]  # [aa_name, codon(U), count, rscu(precomputed, will replace w/ formula)]
 
 # reorder: 20 standard aa alphabetically (already are, minus Stop), Stop group moved to end
@@ -72,5 +76,5 @@ ws.column_dimensions["C"].width = 22
 ws.column_dimensions["D"].width = 10
 ws.freeze_panes = "A2"
 
-wb.save("/sessions/awesome-wizardly-hypatia/mnt/outputs/KB_KS_RSCU_codon_usage.xlsx")
+wb.save(OUT_DIR + "/KB_KS_RSCU_codon_usage.xlsx")
 print("saved")

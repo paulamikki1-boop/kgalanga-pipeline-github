@@ -8,3 +8,6 @@ __pycache__/
 *.fasta
 *.gb
 *.gbk
+output/
+data/
+*.pkl

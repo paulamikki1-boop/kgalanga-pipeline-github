@@ -1,7 +1,11 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import re, json
 from collections import defaultdict
 
-path = "/sessions/serene-wonderful-dirac/mnt/uploads/kaempfariatjepr2.fasta.misa"
+path = IN_DIR + "/kaempfariatjepr2.fasta.misa"
 
 # reverse-complement collapse table (same canonical grouping MISA itself uses)
 def revcomp(s):
@@ -105,6 +109,6 @@ out = {
         for seq_id, d in per_seq.items()
     },
 }
-with open("/sessions/serene-wonderful-dirac/mnt/outputs/misa_raw_split.json", "w") as f:
+with open(OUT_DIR + "/misa_raw_split.json", "w") as f:
     json.dump(out, f, indent=2)
 print("\nsaved misa_raw_split.json")

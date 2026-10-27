@@ -1,3 +1,6 @@
+const OUT_DIR = process.env.KG_OUTPUT_DIR || "output";
+const IN_DIR = process.env.KG_INPUT_DIR || "data";
+require("fs").mkdirSync(OUT_DIR, { recursive: true });
 const fs = require("fs");
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
@@ -129,6 +132,6 @@ const doc = new Document({
 });
 
 Packer.toBuffer(doc).then(buf => {
-  fs.writeFileSync("/sessions/awesome-wizardly-hypatia/mnt/outputs/KB_KS_Table1_and_QC_report.docx", buf);
+  fs.writeFileSync(OUT_DIR + "/KB_KS_Table1_and_QC_report.docx", buf);
   console.log("written");
 });

@@ -1,3 +1,6 @@
+const OUT_DIR = process.env.KG_OUTPUT_DIR || "output";
+const IN_DIR = process.env.KG_INPUT_DIR || "data";
+require("fs").mkdirSync(OUT_DIR, { recursive: true });
 const { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, WidthType, ShadingType, BorderStyle } = require("docx");
 const fs = require("fs");
 
@@ -167,6 +170,6 @@ const doc = new Document({
 });
 
 Packer.toBuffer(doc).then((buffer) => {
-  fs.writeFileSync("/sessions/brave-trusting-ramanujan/mnt/outputs/CPGAVAS2_Methodology_Kgalanga_v2.docx", buffer);
+  fs.writeFileSync(OUT_DIR + "/CPGAVAS2_Methodology_Kgalanga_v2.docx", buffer);
   console.log("written");
 });

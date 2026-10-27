@@ -1,3 +1,7 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import openpyxl
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 from openpyxl.utils import get_column_letter
@@ -377,5 +381,5 @@ ws.merge_cells(start_row=note_r, start_column=1, end_row=note_r, end_column=7)
 ws.row_dimensions[note_r].height = 60
 autosize(ws, [4, 24, 16, 22, 12, 26, 20])
 
-wb.save("/sessions/serene-wonderful-dirac/mnt/outputs/K_galanga_cpGenome_Comparison_Cleaned.xlsx")
+wb.save(OUT_DIR + "/K_galanga_cpGenome_Comparison_Cleaned.xlsx")
 print("saved")

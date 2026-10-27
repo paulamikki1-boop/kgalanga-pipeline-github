@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """True in-silico PCR: search each genome's real sequence for primer sites."""
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import json, re
 from pathlib import Path
 from Bio import SeqIO
 from Bio.Seq import Seq
 
-UP=Path("/sessions/tender-vibrant-faraday/mnt/uploads")
-OUT=Path("/sessions/tender-vibrant-faraday/mnt/outputs/primer")
+UP=Path(IN_DIR)
+OUT=Path(OUT_DIR + "/primer")
+OUT.mkdir(parents=True, exist_ok=True)
 G={
  "K. galanga KS (narrow)":UP/"GeSeqJob-galanga_KS_GenBank.gb",
  "K. galanga KB (broad)": UP/"GeSeqJob-galanga_KB_GenBank.gb",

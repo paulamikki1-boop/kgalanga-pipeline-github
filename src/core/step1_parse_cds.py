@@ -2,13 +2,17 @@
 """
 Step 1 – Parse GenBank files, extract & canonicalize CDS features.
 """
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import sys, re
 from pathlib import Path
 from collections import defaultdict
 from Bio import SeqIO
 from Bio.Seq import Seq
 
-UPLOADS = Path("/sessions/tender-vibrant-faraday/mnt/uploads")
+UPLOADS = Path(IN_DIR)
 FILES = {
     "KS":  UPLOADS / "GeSeqJob-galanga_KS_GenBank.gb",
     "KB":  UPLOADS / "GeSeqJob-galanga_KB_GenBank.gb",
@@ -194,7 +198,7 @@ if __name__ == "__main__":
     print("   ", sorted(results["Ref"]["canonical_cds"].keys()))
 
     import pickle
-    out = Path("/sessions/tender-vibrant-faraday/mnt/outputs")
+    out = Path(OUT_DIR)
     with open(out / "parsed_genomes.pkl", "wb") as fh:
         pickle.dump(results, fh)
     print("\n  Saved parsed_genomes.pkl")

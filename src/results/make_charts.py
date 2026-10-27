@@ -1,3 +1,7 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -24,7 +28,7 @@ COLORS = {
     'REF': '#F18F01',   # amber  – reference
 }
 
-OUT = '/sessions/great-blissful-davinci/mnt/outputs/'
+OUT = OUT_DIR + '/'
 
 # ══════════════════════════════════════════════════════════════════════════════
 # FIGURE 1 – SSR Repeat-Type Distribution

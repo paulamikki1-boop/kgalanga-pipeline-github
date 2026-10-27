@@ -1,9 +1,13 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import json
 import openpyxl
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 from openpyxl.utils import get_column_letter
 
-data = json.load(open("/sessions/serene-wonderful-dirac/mnt/outputs/misa_parsed.json"))
+data = json.load(open(OUT_DIR + "/misa_parsed.json"))
 
 wb = openpyxl.Workbook()
 
@@ -386,5 +390,5 @@ last_r = r0 + len(variants) - 1
 style_body(ws, r0, last_r, 1, 7)
 autosize(ws, [4, 24, 16, 22, 12, 26, 20])
 
-wb.save("/sessions/serene-wonderful-dirac/mnt/outputs/K_galanga_cpGenome_Comparison_Cleaned.xlsx")
+wb.save(OUT_DIR + "/K_galanga_cpGenome_Comparison_Cleaned.xlsx")
 print("saved v2")

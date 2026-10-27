@@ -3,6 +3,10 @@
 Full chloroplast genome analysis pipeline for K. galanga KS/KB vs MK209001
 Steps 1-7 (data extraction; outputs assembled downstream into Word/Excel)
 """
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import sys, re, json, pickle
 from pathlib import Path
 from collections import defaultdict, Counter
@@ -11,8 +15,8 @@ import numpy as np
 from Bio import SeqIO
 from Bio.Seq import Seq
 
-UPLOADS = Path("/sessions/tender-vibrant-faraday/mnt/uploads")
-OUT     = Path("/sessions/tender-vibrant-faraday/mnt/outputs")
+UPLOADS = Path(IN_DIR)
+OUT     = Path(OUT_DIR)
 FILES = {
     "KS":  UPLOADS / "GeSeqJob-galanga_KS_GenBank.gb",
     "KB":  UPLOADS / "GeSeqJob-galanga_KB_GenBank.gb",

@@ -1,3 +1,6 @@
+const OUT_DIR = process.env.KG_OUTPUT_DIR || "output";
+const IN_DIR = process.env.KG_INPUT_DIR || "data";
+require("fs").mkdirSync(OUT_DIR, { recursive: true });
 const fs = require("fs");
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
@@ -32,7 +35,7 @@ function p(text, opts={}) { return new Paragraph({ spacing:{after:160}, ...opts,
 function bullet(text) { return new Paragraph({ spacing:{after:100}, bullet:{level:0}, children:[new TextRun(text)] }); }
 function caption(text) { return new Paragraph({ spacing:{before:60, after:200}, children:[new TextRun({text, italics:true, size:18})] }); }
 
-const imgBuf = fs.readFileSync("/sessions/awesome-wizardly-hypatia/mnt/outputs/variant_map.png");
+const imgBuf = fs.readFileSync(OUT_DIR + "/variant_map.png");
 
 const doc = new Document({
   sections: [{
@@ -122,6 +125,6 @@ const doc = new Document({
 });
 
 Packer.toBuffer(doc).then(buf => {
-  fs.writeFileSync("/sessions/awesome-wizardly-hypatia/mnt/outputs/KB_KS_vs_MK209001_comparison_report.docx", buf);
+  fs.writeFileSync(OUT_DIR + "/KB_KS_vs_MK209001_comparison_report.docx", buf);
   console.log("written");
 });

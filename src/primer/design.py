@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """Find loci with conserved flanks + diagnostic interior; design primers."""
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import pickle, json
 import numpy as np
 from pathlib import Path
 import primer3
 
-OUT=Path("/sessions/tender-vibrant-faraday/mnt/outputs/primer")
+OUT=Path(OUT_DIR + "/primer")
+OUT.mkdir(parents=True, exist_ok=True)
 D=pickle.load(open(OUT/"proj.pkl","rb"))
 KEYS,M,INS=D["keys"],D["matrix"],D["inserts"]
 GAL,OTH,ref_rec=D["galanga"],D["others"],D["ref_record"]

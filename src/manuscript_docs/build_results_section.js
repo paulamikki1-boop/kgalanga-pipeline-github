@@ -1,3 +1,6 @@
+const OUT_DIR = process.env.KG_OUTPUT_DIR || "output";
+const IN_DIR = process.env.KG_INPUT_DIR || "data";
+require("fs").mkdirSync(OUT_DIR, { recursive: true });
 const {
   Document, Packer, Paragraph, TextRun, HeadingLevel,
   Table, TableRow, TableCell, WidthType, AlignmentType,
@@ -653,6 +656,6 @@ const doc = new Document({
 });
 
 Packer.toBuffer(doc).then(buffer => {
-  fs.writeFileSync('/sessions/great-blissful-davinci/mnt/outputs/K_galanga_Results_Section.docx', buffer);
+  fs.writeFileSync(OUT_DIR + '/K_galanga_Results_Section.docx', buffer);
   console.log('Done: K_galanga_Results_Section.docx');
 });

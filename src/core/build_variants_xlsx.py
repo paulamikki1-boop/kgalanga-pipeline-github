@@ -1,8 +1,12 @@
+import os
+OUT_DIR = os.environ.get("KG_OUTPUT_DIR", "output")
+IN_DIR = os.environ.get("KG_INPUT_DIR", "data")
+os.makedirs(OUT_DIR, exist_ok=True)
 import json
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 
-rows = json.load(open("/sessions/awesome-wizardly-hypatia/mnt/outputs/kb_vs_ref_variants_annotated.json"))
+rows = json.load(open(OUT_DIR + "/kb_vs_ref_variants_annotated.json"))
 
 wb = Workbook()
 ws = wb.active
@@ -47,5 +51,5 @@ for i,n in enumerate(notes):
     ws.merge_cells(start_row=notes_row+i, start_column=1, end_row=notes_row+i, end_column=6)
 
 ws.freeze_panes = "A2"
-wb.save("/sessions/awesome-wizardly-hypatia/mnt/outputs/KB_KS_vs_MK209001_variants.xlsx")
+wb.save(OUT_DIR + "/KB_KS_vs_MK209001_variants.xlsx")
 print("saved")
