@@ -795,12 +795,14 @@ def nei_gojobori_sites(seq1, seq2, table=11):
     """
     Count synonymous (Sd) and nonsynonymous (Nd) differences
     and expected sites (S, N) for two aligned CDS sequences.
-    Nei & Gojobori (1986) method.
+    Nei & Gojobori (1986) method: codons that differ at more than one position
+    are scored by averaging over all possible mutational pathways between them.
     Returns (Sd, Nd, S, N)
     """
     assert len(seq1) == len(seq2) and len(seq1) % 3 == 0
     Sd = Nd = S = N = 0.0
     ct = CodonTable.unambiguous_dna_by_id[table]
+    aa_of = lambda cod: ct.forward_table.get(cod, "*")
     for i in range(0, len(seq1), 3):
         c1 = seq1[i:i+3].upper()
         c2 = seq2[i:i+3].upper()
@@ -808,25 +810,29 @@ def nei_gojobori_sites(seq1, seq2, table=11):
         # Count synonymous sites in each codon
         for codon in (c1, c2):
             syn_sites = 0.0
-            aa = ct.forward_table.get(codon, "*")
+            aa = aa_of(codon)
             for pos in range(3):
                 n_syn_changes = 0
                 for base in "ACGT":
                     if base == codon[pos]: continue
                     alt = list(codon); alt[pos] = base; alt = ''.join(alt)
-                    alt_aa = ct.forward_table.get(alt, "*")
-                    if alt_aa == aa: n_syn_changes += 1
+                    if aa_of(alt) == aa: n_syn_changes += 1
                 syn_sites += n_syn_changes / 3.0
             S += syn_sites / 2
             N += (3 - syn_sites) / 2
-        # Count synonymous / nonsynonymous differences
-        if c1 == c2: continue
-        aa1 = ct.forward_table.get(c1, "*")
-        aa2 = ct.forward_table.get(c2, "*")
-        if aa1 == aa2:
-            Sd += 1
-        else:
-            Nd += 1
+        # Count synonymous / nonsynonymous differences, averaged over pathways
+        diff_pos = [p for p in range(3) if c1[p] != c2[p]]
+        if not diff_pos: continue
+        paths = list(permutations(diff_pos))
+        for order in paths:
+            cur = c1
+            for p in order:
+                nxt = cur[:p] + c2[p] + cur[p+1:]
+                if aa_of(cur) == aa_of(nxt):
+                    Sd += 1.0 / len(paths)
+                else:
+                    Nd += 1.0 / len(paths)
+                cur = nxt
     return Sd, Nd, S, N
 
 def jc_correct(p):
@@ -884,11 +890,6 @@ def find_junction_genes(record, regions, label):
     
     gene_features = []
     for feat in record.features:
-        if feat.type not in ("gene","CDS"): continue
-        if feat.type == "CDS" and any(
-            feat.type == "gene" and 
-            feat.qualifiers.get("gene") == feat.qualifiers.get("gene")
-            for f in record.features): continue
         if feat.type != "gene": continue
         gene = feat.qualifiers.get("gene", ["?"])[0]
         # Use per-exon parts to avoid trans-spliced bounding box

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-Faithful re-implementation of the MISA (MIcroSAtellite identification tool)
-algorithm (Beier et al. 2017 / Thiel et al. 2003), validated against a
-known-correct MISA-web run before being trusted on new sequences.
+MISA-style SSR detector (after Thiel et al. 2003 / Beier et al. 2017).
+The minimum repeat thresholds in THRESH (mono 8, di 5, tri 4, tetra/penta/hexa 3)
+are chloroplast-oriented and are lower than the MISA-web defaults, so results
+will not match a default MISA run. Compare against MISA-web with the same
+thresholds before relying on it for new sequences.
 
 Algorithm: for unit sizes 1..6, in increasing order, find all runs where a
 k-mer repeats consecutively >= min_repeats[k] times. Positions already

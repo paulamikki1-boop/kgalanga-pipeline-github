@@ -73,6 +73,40 @@ Each stage reads the previous stage's files from `KG_OUTPUT_DIR`.
 - Scripts have been syntax-checked but not re-run end to end after the path change,
   because the input data are not in the repository.
 
+## Methods notes
+
+- **Genetic code:** plastid translation table 11 (`Bio.Data.CodonTable`) throughout.
+- **RSCU:** `n_syn * count / family_total` (Sharp & Li 1987), computed per amino-acid
+  family including stop codons.
+- **Ka/Ks:** Nei & Gojobori (1986) with pathway averaging for multi-change codons and
+  Jukes-Cantor correction, pooled across genes with equal CDS length.
+- **SSR detection:** minimum repeats mono 8 / di 5 / tri 4 / tetra 3 / penta 3 / hexa 3;
+  compound SSRs when separated by <= 100 bp. These are not the MISA-web defaults.
+- **Phylogeny:** neighbour-joining on K2P / JC69 / p distances from the whole-plastome
+  alignment with one inverted repeat removed.
+- **Start codons:** a CDS is flagged "missing start" unless it translates to Met under
+  table 11, so valid alternative starts (e.g. GTG, or ACG that needs RNA editing) are flagged
+  for manual review rather than accepted automatically.
+
+## Verification
+
+`tests/test_biopython_crosschecks.py` checks the hand-written code against Biopython:
+
+| Code | Reference | Result |
+|---|---|---|
+| Nei-Gojobori site/difference counts | `Bio.codonalign` NG86 counts, all 3,660 sense-codon pairs | identical |
+| Neighbour-joining | `Bio.Phylo.TreeConstruction` NJ, 25 random 8-taxon matrices | same topology and tree length |
+| RSCU | closed-form formula and family-sum invariant | passes |
+
+```
+pip install -r requirements.txt
+python -m unittest discover -s tests -v
+```
+
+A Ka/Ks bug was found this way and fixed: codons that differ at 2 or 3 positions
+were scored as a single difference instead of being averaged over mutational pathways.
+Single-change codons, which dominate closely related chloroplast genomes, were unaffected.
+
 ## Dependencies
 
 - [Biopython](https://biopython.org/) (Biopython License / BSD-3-Clause) —
